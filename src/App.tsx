@@ -184,7 +184,7 @@ function HeroCarousel({
                     margin: 0,
                     objectFit: 'contain',
                     objectPosition: 'center center',
-                    transform: dessert ? 'scale(1.04)' : (isMobile ? 'scale(2)' : 'none'),
+                    transform: dessert ? 'scale(1.04)' : (isMobile ? 'none' : 'scale(2)'),
                     transformOrigin: 'center center',
                     display: 'block',
                     pointerEvents: 'none',
