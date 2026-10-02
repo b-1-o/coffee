@@ -200,7 +200,6 @@ function App() {
   const center = activeIndex
   const left = (activeIndex + 3) % 4
   const right = (activeIndex + 1) % 4
-  const back = (activeIndex + 2) % 4
 
   const getRoleStyle = (index: number) => {
     const role =
