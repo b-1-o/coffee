@@ -34,7 +34,7 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   const left = (activeIndex + count - 1) % count
   const right = (activeIndex + 1) % count
   const role = index === center ? 'center' : index === left ? 'left' : index === right ? 'right' : 'back'
-  const duration = isMobile ? 480 : 650
+  const duration = isMobile ? 560 : 650
   const easing = 'cubic-bezier(0.22,1,0.36,1)'
 
   if (isMobile) {
@@ -44,7 +44,7 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
       bottom: dessert ? '24%' : '12%',
       height: dessert ? '36%' : '68%',
       aspectRatio: dessert ? '1 / 1' : '0.58 / 1',
-      willChange: 'transform, opacity',
+      willChange: isMobile ? 'transform, opacity' : undefined,
       transition: `transform ${duration}ms ${easing}, opacity ${duration}ms ${easing}`,
       contain: 'layout paint',
     }
@@ -184,7 +184,8 @@ function HeroCarousel({
                     margin: 0,
                     objectFit: 'contain',
                     objectPosition: 'center center',
-                    transform: 'none',
+                    transform: dessert ? 'scale(1.04)' : (isMobile ? 'scale(2)' : 'none'),
+                    transformOrigin: 'center center',
                     display: 'block',
                     pointerEvents: 'none',
                     userSelect: 'none',
