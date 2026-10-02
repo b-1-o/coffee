@@ -34,26 +34,64 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   const left = (activeIndex + count - 1) % count
   const right = (activeIndex + 1) % count
   const role = index === center ? 'center' : index === left ? 'left' : index === right ? 'right' : 'back'
-  const duration = isMobile ? 520 : 650
+  const duration = isMobile ? 480 : 650
   const easing = 'cubic-bezier(0.22,1,0.36,1)'
-  const transition = isMobile
-    ? `transform ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, height ${duration}ms ${easing}, bottom ${duration}ms ${easing}`
-    : `transform ${duration}ms ${easing}, filter ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, height ${duration}ms ${easing}, bottom ${duration}ms ${easing}`
+
+  if (isMobile) {
+    const base: React.CSSProperties = {
+      position: 'absolute',
+      left: '50%',
+      bottom: dessert ? '24%' : '12%',
+      height: dessert ? '36%' : '68%',
+      aspectRatio: dessert ? '1 / 1' : '0.58 / 1',
+      willChange: 'transform, opacity',
+      transition: `transform ${duration}ms ${easing}, opacity ${duration}ms ${easing}`,
+      contain: 'layout paint',
+    }
+
+    if (role === 'center') {
+      return {
+        ...base,
+        transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 1.04 : 1.95) + ')',
+        opacity: 1,
+        zIndex: 20,
+      }
+    }
+
+    if (role === 'left' || role === 'right') {
+      const x = role === 'left' ? '-35vw' : '35vw'
+      const y = dessert ? '3vh' : '10vh'
+      return {
+        ...base,
+        transform: `translate3d(calc(-50% + ${x}), ${y}, 0) scale(${dessert ? 0.58 : 0.96})`,
+        opacity: dessert ? 0.68 : 0.72,
+        zIndex: 10,
+      }
+    }
+
+    return {
+      ...base,
+      transform: 'translate3d(-50%, 9vh, 0) scale(0.62)',
+      opacity: 0.25,
+      zIndex: 5,
+    }
+  }
+
   const base: React.CSSProperties = {
     position: 'absolute',
-    transition,
-    willChange: isMobile ? 'transform, opacity' : 'transform, filter, opacity',
+    transition: `transform ${duration}ms ${easing}, filter ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, height ${duration}ms ${easing}, bottom ${duration}ms ${easing}`,
+    willChange: 'transform, filter, opacity',
   }
 
   if (role === 'center') {
     return {
       ...base,
       left: '50%',
-      bottom: dessert ? (isMobile ? '24%' : '14%') : (isMobile ? '12%' : '8%'),
-      height: dessert ? (isMobile ? '36%' : '43%') : (isMobile ? '68%' : '72%'),
+      bottom: dessert ? '14%' : '8%',
+      height: dessert ? '43%' : '72%',
       aspectRatio: dessert ? '1 / 1' : '0.58 / 1',
-      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? (isMobile ? 1.04 : 1.1) : 1) + ')',
-      filter: isMobile ? 'none' : 'none',
+      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 1.1 : 1) + ')',
+      filter: 'none',
       opacity: 1,
       zIndex: 20,
     }
@@ -62,12 +100,12 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   if (role === 'left' || role === 'right') {
     return {
       ...base,
-      left: role === 'left' ? (isMobile ? '15%' : '23%') : (isMobile ? '85%' : '77%'),
-      bottom: dessert ? (isMobile ? '27%' : '19%') : (isMobile ? '22%' : '18%'),
-      height: dessert ? (isMobile ? '13%' : '16%') : (isMobile ? '14%' : '17%'),
+      left: role === 'left' ? '23%' : '77%',
+      bottom: dessert ? '19%' : '18%',
+      height: dessert ? '16%' : '17%',
       aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 0.92 : (isMobile ? 0.94 : 1.0)) + ')',
-      filter: isMobile ? 'none' : 'blur(2px)',
+      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 0.92 : 1.0) + ')',
+      filter: 'blur(2px)',
       opacity: dessert ? 0.68 : 0.72,
       zIndex: 10,
     }
@@ -76,11 +114,11 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   return {
     ...base,
     left: '50%',
-    bottom: dessert ? (isMobile ? '29%' : '19%') : (isMobile ? '27%' : '17%'),
-    height: dessert ? (isMobile ? '10%' : '13%') : (isMobile ? '8%' : '12%'),
+    bottom: dessert ? '19%' : '17%',
+    height: dessert ? '13%' : '12%',
     aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
     transform: 'translate3d(-50%, 0, 0) scale(0.8)',
-    filter: isMobile ? 'none' : 'blur(4px)',
+    filter: 'blur(4px)',
     opacity: dessert ? 0.35 : 0.25,
     zIndex: 5,
   }
@@ -99,11 +137,24 @@ function HeroCarousel({
   const current = items[activeIndex]
   const dessert = mode === 'dessert'
 
+  useEffect(() => {
+    const indexes = Array.from(new Set([
+      activeIndex,
+      (activeIndex + items.length - 1) % items.length,
+      (activeIndex + 1) % items.length,
+    ]))
+    indexes.forEach((index) => {
+      const preload = new Image()
+      preload.decoding = 'async'
+      preload.src = items[index].src
+    })
+  }, [activeIndex, items])
+
   return (
     <div className="relative w-full overflow-hidden" style={{ backgroundColor: current.bg, transition: 'background-color 650ms cubic-bezier(0.22,1,0.36,1)', fontFamily: "'Inter', sans-serif" }}>
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.28) 34%, rgba(255,255,255,0.04) 72%, rgba(255,255,255,0.16) 100%)' }} />
       <div className="relative w-full" style={{ height: '100svh', minHeight: isMobile ? 560 : 620, overflow: 'hidden', touchAction: 'pan-y' }}>
-        <div className="carousel-noise absolute inset-0 pointer-events-none" style={{ zIndex: 50, opacity: isMobile ? 0.08 : 0.32, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
+        <div className="carousel-noise absolute inset-0 pointer-events-none" style={{ zIndex: 50, opacity: isMobile ? 0 : 0.16, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
 
         {/* Layer 1 — oversized editorial word in the background */}
         <div
@@ -119,26 +170,25 @@ function HeroCarousel({
         <div className="absolute inset-0" style={{ zIndex: 3 }}>
           {items.map((item, i) => {
             const role = i === activeIndex ? 'center' : i === (activeIndex + items.length - 1) % items.length ? 'left' : i === (activeIndex + 1) % items.length ? 'right' : 'back'
-            if (isMobile && role === 'back') return null
+            if (role === 'back') return null
             return (
               <div key={item.id} style={getItemRole(i, activeIndex, items.length, isMobile, dessert)}>
                 <img
                   src={item.src}
                   alt={item.name}
                   style={{
-                    width: dessert ? '100%' : (isMobile ? '128%' : '124%'),
-                    height: dessert ? '100%' : (isMobile ? '128%' : '124%'),
+                    width: '100%',
+                    height: '100%',
                     maxWidth: 'none',
                     maxHeight: 'none',
-                    marginLeft: dessert ? '0' : (isMobile ? '-14%' : '-12%'),
-                    marginTop: dessert ? '0' : (isMobile ? '-10%' : '-8%'),
+                    margin: 0,
                     objectFit: 'contain',
                     objectPosition: 'center center',
-                    transform: dessert ? 'none' : 'scale(2)',
-                    transformOrigin: 'center center',
+                    transform: 'none',
                     display: 'block',
                     pointerEvents: 'none',
-                    userSelect: 'none'
+                    userSelect: 'none',
+                    contain: 'layout paint',
                   }}
                   draggable={false}
                 />
@@ -179,7 +229,7 @@ function HeroCarousel({
           <p className="hidden sm:block text-xs sm:text-sm text-white/75 leading-relaxed mb-4">{subtitle || current.short}</p>
           <div className="flex gap-2.5 sm:gap-3 items-center">
             <button onClick={() => navigate('prev')} className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Previous"><ArrowLeft size={24} /></button>
-            <button onClick={() => navigate('next')} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 backdrop-blur-sm text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Next"><ArrowRight size={24} /></button>
+            <button onClick={() => navigate('next')} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Next"><ArrowRight size={24} /></button>
           </div>
         </div>
 
@@ -203,10 +253,6 @@ function App() {
     check()
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
-  }, [])
-
-  useEffect(() => {
-    ;[...COFFEES, ...DESSERTS].forEach((item) => { const img = new Image(); img.src = item.src })
   }, [])
 
   const selectedCoffee = COFFEES.find((c) => c.id === selectedCoffeeId)
