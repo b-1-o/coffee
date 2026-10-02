@@ -164,7 +164,7 @@ function HeroCarousel({
           <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45 mb-2">{String(activeIndex + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</p>
           <p className="hidden sm:block text-xs sm:text-sm text-white/75 leading-relaxed mb-4">{subtitle || current.short}</p>
           <div className="flex gap-2.5 sm:gap-3 items-center">
-            <button onClick={() => navigate('prev')} className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10" text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Previous"><ArrowLeft size={24} /></button>
+            <button onClick={() => navigate('prev')} className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Previous"><ArrowLeft size={24} /></button>
             <button onClick={() => navigate('next')} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 backdrop-blur-sm text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Next"><ArrowRight size={24} /></button>
           </div>
         </div>
