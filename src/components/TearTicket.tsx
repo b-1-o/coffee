@@ -1,7 +1,53 @@
 'use client';
+// The source is JavaScript-first React Bits code. Keep the component runtime unchanged while
+// letting the surrounding Vite/TypeScript app compile it without changing the interaction.
+// @ts-nocheck
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { motion, useMotionTemplate, useReducedMotion, useSpring, useTransform } from 'motion/react';
+
+
+import type { ReactNode } from 'react';
+
+type TearTicketProps = {
+  children?: ReactNode;
+  stub?: ReactNode;
+  image?: string;
+  imageAlt?: string;
+  scrim?: boolean;
+  imageRadius?: number;
+  orientation?: 'horizontal' | 'vertical';
+  torn?: boolean;
+  defaultTorn?: boolean;
+  onTear?: () => void;
+  width?: number;
+  height?: number;
+  stubSize?: number;
+  radius?: number;
+  holes?: number;
+  holeSize?: number;
+  notch?: number;
+  roughness?: number;
+  tearAngle?: number;
+  stretch?: number;
+  resistance?: number;
+  rotate?: number;
+  tilt?: boolean;
+  tiltMax?: number;
+  tiltReach?: number;
+  parallax?: number;
+  perspective?: number;
+  background?: string;
+  color?: string;
+  border?: boolean;
+  borderColor?: string;
+  borderWidth?: number;
+  stubBackground?: string;
+  recenter?: boolean;
+  disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
+};
 
 import './TearTicket.css';
 
@@ -110,7 +156,7 @@ recenter = true,
 disabled = false,
 ariaLabel = 'Tear off the stub',
 className = ''
-}) {
+}: TearTicketProps) {
 const reduce = useReducedMotion();
 const controlled = torn !== undefined;
 const [inner, setInner] = useState(defaultTorn);
