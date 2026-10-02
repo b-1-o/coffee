@@ -208,3 +208,22 @@ transition: none;
 }
 }
 
+
+@media (max-width: 639px) {
+  .tear-ticket__stage {
+    transition-duration: 380ms;
+    will-change: transform;
+  }
+
+  .tear-ticket__piece--stub {
+    will-change: transform, opacity;
+  }
+
+  .tear-ticket__image {
+    transition-duration: 0ms;
+  }
+
+  .tear-ticket__fibres {
+    contain: layout paint;
+  }
+}
