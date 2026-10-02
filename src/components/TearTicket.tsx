@@ -1,7 +1,5 @@
-'use client';
-// The source is JavaScript-first React Bits code. Keep the component runtime unchanged while
-// letting the surrounding Vite/TypeScript app compile it without changing the interaction.
 // @ts-nocheck
+'use client';
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { motion, useMotionTemplate, useReducedMotion, useSpring, useTransform } from 'motion/react';
