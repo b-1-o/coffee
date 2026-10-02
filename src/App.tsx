@@ -134,6 +134,8 @@ function HeroCarousel({
                     marginTop: dessert ? '0' : (isMobile ? '-10%' : '-8%'),
                     objectFit: 'contain',
                     objectPosition: 'center center',
+                    transform: dessert ? 'none' : 'scale(2)',
+                    transformOrigin: 'center center',
                     display: 'block',
                     pointerEvents: 'none',
                     userSelect: 'none'
