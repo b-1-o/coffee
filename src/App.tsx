@@ -34,18 +34,26 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   const left = (activeIndex + count - 1) % count
   const right = (activeIndex + 1) % count
   const role = index === center ? 'center' : index === left ? 'left' : index === right ? 'right' : 'back'
-  const transition = 'transform 650ms cubic-bezier(0.22,1,0.36,1), filter 650ms cubic-bezier(0.22,1,0.36,1), opacity 650ms cubic-bezier(0.22,1,0.36,1), left 650ms cubic-bezier(0.22,1,0.36,1), height 650ms cubic-bezier(0.22,1,0.36,1), bottom 650ms cubic-bezier(0.22,1,0.36,1)'
-  const base: React.CSSProperties = { position: 'absolute', transition, willChange: 'transform, filter, opacity' }
+  const duration = isMobile ? 520 : 650
+  const easing = 'cubic-bezier(0.22,1,0.36,1)'
+  const transition = isMobile
+    ? `transform ${duration}ms ${easing}, opacity ${duration}ms ${easing}`
+    : `transform ${duration}ms ${easing}, filter ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, height ${duration}ms ${easing}, bottom ${duration}ms ${easing}`
+  const base: React.CSSProperties = {
+    position: 'absolute',
+    transition,
+    willChange: isMobile ? 'transform, opacity' : 'transform, filter, opacity',
+  }
 
   if (role === 'center') {
     return {
       ...base,
       left: '50%',
-      bottom: dessert ? (isMobile ? '25%' : '15%') : (isMobile ? '25%' : '20%'),
-      height: dessert ? (isMobile ? '31%' : '38%') : (isMobile ? '38%' : '48%'),
+      bottom: dessert ? (isMobile ? '25%' : '15%') : (isMobile ? '17%' : '14%'),
+      height: dessert ? (isMobile ? '34%' : '41%') : (isMobile ? '56%' : '58%'),
       aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-      transform: 'translateX(-50%) scale(' + (dessert ? (isMobile ? 1.02 : 1.08) : (isMobile ? 1.12 : 1.22)) + ')',
-      filter: 'none',
+      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? (isMobile ? 1.04 : 1.1) : (isMobile ? 1.28 : 1.38)) + ')',
+      filter: isMobile ? 'none' : 'none',
       opacity: 1,
       zIndex: 20,
     }
@@ -54,13 +62,13 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   if (role === 'left' || role === 'right') {
     return {
       ...base,
-      left: role === 'left' ? (isMobile ? '18%' : '24%') : (isMobile ? '82%' : '76%'),
-      bottom: dessert ? (isMobile ? '28%' : '19%') : (isMobile ? '30%' : '22%'),
-      height: dessert ? (isMobile ? '12%' : '16%') : (isMobile ? '10%' : '14%'),
+      left: role === 'left' ? (isMobile ? '15%' : '23%') : (isMobile ? '85%' : '77%'),
+      bottom: dessert ? (isMobile ? '27%' : '19%') : (isMobile ? '22%' : '18%'),
+      height: dessert ? (isMobile ? '13%' : '16%') : (isMobile ? '14%' : '17%'),
       aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-      transform: 'translateX(-50%) scale(' + (dessert ? 0.92 : 1.0) + ')',
-      filter: 'blur(2px)',
-      opacity: dessert ? 0.7 : 0.78,
+      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 0.92 : (isMobile ? 0.94 : 1.0)) + ')',
+      filter: isMobile ? 'none' : 'blur(2px)',
+      opacity: dessert ? 0.68 : 0.72,
       zIndex: 10,
     }
   }
@@ -68,12 +76,12 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   return {
     ...base,
     left: '50%',
-    bottom: dessert ? (isMobile ? '28%' : '19%') : (isMobile ? '28%' : '17%'),
-    height: dessert ? (isMobile ? '10%' : '13%') : (isMobile ? '9%' : '12%'),
+    bottom: dessert ? (isMobile ? '29%' : '19%') : (isMobile ? '27%' : '17%'),
+    height: dessert ? (isMobile ? '10%' : '13%') : (isMobile ? '8%' : '12%'),
     aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-    transform: 'translateX(-50%) scale(0.86)',
-    filter: 'blur(4px)',
-    opacity: dessert ? 0.45 : 0.35,
+    transform: 'translate3d(-50%, 0, 0) scale(0.8)',
+    filter: isMobile ? 'none' : 'blur(4px)',
+    opacity: dessert ? 0.35 : 0.25,
     zIndex: 5,
   }
 }
@@ -94,8 +102,8 @@ function HeroCarousel({
   return (
     <div className="relative w-full overflow-hidden" style={{ backgroundColor: current.bg, transition: 'background-color 650ms cubic-bezier(0.22,1,0.36,1)', fontFamily: "'Inter', sans-serif" }}>
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.28) 34%, rgba(255,255,255,0.04) 72%, rgba(255,255,255,0.16) 100%)' }} />
-      <div className="relative w-full" style={{ height: '100vh', minHeight: 620, overflow: 'hidden' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 50, opacity: 0.32, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
+      <div className="relative w-full" style={{ height: '100svh', minHeight: isMobile ? 560 : 620, overflow: 'hidden', touchAction: 'pan-y' }}>
+        <div className="carousel-noise absolute inset-0 pointer-events-none" style={{ zIndex: 50, opacity: isMobile ? 0.08 : 0.32, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
 
         {/* Layer 1 — oversized editorial word in the background */}
         <div
@@ -109,24 +117,60 @@ function HeroCarousel({
 
         {/* Layer 2 — product photography sits in front of the word */}
         <div className="absolute inset-0" style={{ zIndex: 3 }}>
-          {items.map((item, i) => (
-            <div key={item.id} style={getItemRole(i, activeIndex, items.length, isMobile, dessert)}>
-              <img src={item.src} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center bottom', display: 'block' }} draggable={false} />
-            </div>
-          ))}
+          {items.map((item, i) => {
+            const role = i === activeIndex ? 'center' : i === (activeIndex + items.length - 1) % items.length ? 'left' : i === (activeIndex + 1) % items.length ? 'right' : 'back'
+            if (isMobile && role === 'back') return null
+            return (
+              <div key={item.id} style={getItemRole(i, activeIndex, items.length, isMobile, dessert)}>
+                <img
+                  src={item.src}
+                  alt={item.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center bottom', display: 'block', pointerEvents: 'none', userSelect: 'none' }}
+                  draggable={false}
+                />
+                <div
+                  aria-hidden={role !== 'center'}
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: 'calc(100% + 10px)',
+                    transform: 'translate3d(-50%, 0, 0)',
+                    width: 'max-content',
+                    maxWidth: 'calc(100vw - 40px)',
+                    textAlign: 'center',
+                    opacity: role === 'center' ? 1 : 0,
+                    transition: `opacity ${isMobile ? 520 : 650}ms cubic-bezier(0.22,1,0.36,1)`,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <p style={{
+                    margin: 0,
+                    fontFamily: "'Anton', sans-serif",
+                    fontSize: isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(24px, 3vw, 38px)',
+                    lineHeight: 0.95,
+                    letterSpacing: '-0.025em',
+                    textTransform: 'uppercase',
+                    color: 'white',
+                    whiteSpace: 'nowrap',
+                    textShadow: '0 2px 24px rgba(0,0,0,0.3)',
+                  }}>{item.name}</p>
+                </div>
+              </div>
+            )
+          })}
         </div>
 
-        <div className="absolute bottom-6 left-4 sm:bottom-16 sm:left-16 max-w-[340px]" style={{ zIndex: 60 }}>
-          <p className="font-bold uppercase tracking-widest mb-2 sm:mb-3 text-base sm:text-[22px] text-white/95">{current.name}</p>
-          <p className="hidden sm:block text-xs sm:text-sm text-white/80 leading-relaxed mb-4">{subtitle || current.short}</p>
-          <div className="flex gap-3 items-center">
-            <button onClick={() => navigate('prev')} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 backdrop-blur-sm text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Previous"><ArrowLeft size={24} /></button>
+        <div className="absolute bottom-5 left-4 sm:bottom-16 sm:left-16 max-w-[340px]" style={{ zIndex: 60 }}>
+          <p className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45 mb-2">{String(activeIndex + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</p>
+          <p className="hidden sm:block text-xs sm:text-sm text-white/75 leading-relaxed mb-4">{subtitle || current.short}</p>
+          <div className="flex gap-2.5 sm:gap-3 items-center">
+            <button onClick={() => navigate('prev')} className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10" text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Previous"><ArrowLeft size={24} /></button>
             <button onClick={() => navigate('next')} className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/80 bg-black/10 backdrop-blur-sm text-white flex items-center justify-center transition-transform duration-200 hover:scale-105" aria-label="Next"><ArrowRight size={24} /></button>
           </div>
         </div>
 
         {/* One action only — the existing Pair It flow */}
-        <button onClick={() => onSelect(current)} className="absolute bottom-6 right-4 sm:bottom-16 sm:right-10 flex items-center gap-2 text-white/95 hover:text-white transition-transform duration-200 hover:translate-x-1 bg-transparent border-0 cursor-pointer p-0" style={{ zIndex: 60, fontFamily: "'Anton', sans-serif", fontSize: 'clamp(22px, 4vw, 54px)', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1, textTransform: 'uppercase' }}>
+        <button onClick={() => onSelect(current)} className="absolute bottom-6 right-4 sm:bottom-16 sm:right-10 flex items-center gap-2 text-white/95 hover:text-white transition-transform duration-200 hover:translate-x-1 bg-transparent border-0 cursor-pointer p-0" style={{ zIndex: 60, fontFamily: "'Anton', sans-serif", fontSize: isMobile ? 'clamp(28px, 9vw, 44px)' : 'clamp(22px, 4vw, 54px)', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1, textTransform: 'uppercase', bottom: isMobile ? '28px' : undefined }}>
           PAIR IT <ArrowRight className="w-5 h-5 sm:w-8 sm:h-8" strokeWidth={2} />
         </button>
       </div>
