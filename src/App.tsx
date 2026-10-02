@@ -41,10 +41,10 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
     return {
       ...base,
       left: '50%',
-      bottom: dessert ? (isMobile ? '25%' : '15%') : (isMobile ? '12%' : '-1%'),
-      height: dessert ? (isMobile ? '31%' : '38%') : (isMobile ? '57%' : '78%'),
+      bottom: dessert ? (isMobile ? '25%' : '15%') : (isMobile ? '23%' : '15%'),
+      height: dessert ? (isMobile ? '31%' : '38%') : (isMobile ? '43%' : '58%'),
       aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-      transform: `translateX(-50%) scale(${dessert ? (isMobile ? 1.02 : 1.08) : (isMobile ? 1.08 : 1.16)})`,
+      transform: 'translateX(-50%) scale(' + (dessert ? (isMobile ? 1.02 : 1.08) : (isMobile ? 1.08 : 1.10)) + ')',
       filter: 'none',
       opacity: 1,
       zIndex: 20,
@@ -54,13 +54,13 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   if (role === 'left' || role === 'right') {
     return {
       ...base,
-      left: role === 'left' ? (isMobile ? '19%' : '27%') : (isMobile ? '81%' : '73%'),
-      bottom: dessert ? (isMobile ? '28%' : '19%') : (isMobile ? '24%' : '10%'),
-      height: dessert ? (isMobile ? '12%' : '16%') : (isMobile ? '13%' : '22%'),
+      left: role === 'left' ? (isMobile ? '18%' : '24%') : (isMobile ? '82%' : '76%'),
+      bottom: dessert ? (isMobile ? '28%' : '19%') : (isMobile ? '28%' : '17%'),
+      height: dessert ? (isMobile ? '12%' : '16%') : (isMobile ? '11%' : '18%'),
       aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-      transform: `translateX(-50%) scale(${dessert ? 0.92 : 0.96})`,
+      transform: 'translateX(-50%) scale(' + (dessert ? 0.92 : 0.95) + ')',
       filter: 'blur(2px)',
-      opacity: 0.7,
+      opacity: dessert ? 0.7 : 0.78,
       zIndex: 10,
     }
   }
@@ -68,16 +68,15 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   return {
     ...base,
     left: '50%',
-    bottom: dessert ? (isMobile ? '28%' : '19%') : (isMobile ? '24%' : '10%'),
-    height: dessert ? (isMobile ? '10%' : '13%') : (isMobile ? '10%' : '17%'),
+    bottom: dessert ? (isMobile ? '28%' : '19%') : (isMobile ? '28%' : '17%'),
+    height: dessert ? (isMobile ? '10%' : '13%') : (isMobile ? '9%' : '12%'),
     aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
     transform: 'translateX(-50%) scale(0.86)',
     filter: 'blur(4px)',
-    opacity: 0.45,
+    opacity: dessert ? 0.45 : 0.35,
     zIndex: 5,
   }
 }
-
 function HeroCarousel({
   items, brand, ghost, onSelect, subtitle, mode,
 }: {
@@ -94,13 +93,14 @@ function HeroCarousel({
 
   return (
     <div className="relative w-full overflow-hidden" style={{ backgroundColor: current.bg, transition: 'background-color 650ms cubic-bezier(0.22,1,0.36,1)', fontFamily: "'Inter', sans-serif" }}>
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.28) 34%, rgba(255,255,255,0.04) 72%, rgba(255,255,255,0.16) 100%)' }} />
       <div className="relative w-full" style={{ height: '100vh', minHeight: 620, overflow: 'hidden' }}>
         <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 50, opacity: 0.32, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
 
         {/* Layer 1 — oversized editorial word in the background */}
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-          style={{ zIndex: 1, fontFamily: "'Anton', sans-serif", fontSize: dessert ? 'clamp(120px, 27vw, 360px)' : 'clamp(150px, 34vw, 470px)', fontWeight: 900, color: 'white', opacity: 0.105, lineHeight: 0.8, letterSpacing: '-0.055em', whiteSpace: 'nowrap', transform: 'translateY(-2%)' }}
+          style={{ zIndex: 1, fontFamily: "'Anton', sans-serif", fontSize: dessert ? 'clamp(120px, 27vw, 360px)' : 'clamp(180px, 35vw, 520px)', fontWeight: 900, color: 'white', opacity: dessert ? 0.105 : 0.16, lineHeight: 0.8, letterSpacing: '-0.055em', whiteSpace: 'nowrap', transform: 'translateY(-2%)' }}
         >
           {ghost}
         </div>
@@ -170,7 +170,7 @@ function App() {
 
         {step === 'ticket' && selectedCoffee && selectedDessert && (
           <motion.div key="ticket" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="min-h-screen flex flex-col items-center justify-center px-4 py-16 bg-[#071612]">
-            <div className="w-full max-w-[480px]">
+            <div className="w-full max-w-[480px] rounded-[24px] p-3 sm:p-5" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.16) 40%, rgba(255,255,255,0.04) 78%, rgba(255,255,255,0.10) 100%)' }}>
               <TearTicket
                 image={selectedCoffee.src}
                 imageAlt={selectedCoffee.name}
@@ -181,7 +181,7 @@ function App() {
                 onTear={() => setStep('recipe')}
                 width={460}
                 height={250}
-                stubSize={130}
+                stubSize={150}
                 radius={16}
                 holes={12}
                 holeSize={6}
@@ -190,13 +190,13 @@ function App() {
                 tearAngle={30}
                 stretch={30}
                 resistance={0.45}
-                rotate={3}
+                rotate={4}
                 tilt
-                tiltMax={8}
+                tiltMax={9}
                 tiltReach={260}
                 parallax={6}
                 perspective={1000}
-                background="#1a2e24"
+                background="#151b18"
                 color="#f5f5f5"
                 border
                 borderWidth={1}
