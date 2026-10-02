@@ -196,6 +196,14 @@ function App() {
   const [step, setStep] = useState<Step>('coffee')
   const [selectedCoffeeId, setSelectedCoffeeId] = useState<string | null>(null)
   const [selectedDessertId, setSelectedDessertId] = useState<string | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     ;[...COFFEES, ...DESSERTS].forEach((item) => { const img = new Image(); img.src = item.src })
@@ -228,18 +236,18 @@ function App() {
 
         {step === 'ticket' && selectedCoffee && selectedDessert && (
           <motion.div key="ticket" initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="min-h-screen flex flex-col items-center justify-center px-4 py-16 bg-[#071612]">
-            <div className="w-full max-w-[480px] rounded-[24px] p-3 sm:p-5" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.16) 40%, rgba(255,255,255,0.04) 78%, rgba(255,255,255,0.10) 100%)' }}>
+            <div className="w-full max-w-[780px] rounded-[24px] p-2 sm:p-5" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.34) 0%, rgba(0,0,0,0.16) 40%, rgba(255,255,255,0.04) 78%, rgba(255,255,255,0.10) 100%)' }}>
               <TearTicket
                 image={selectedCoffee.src}
                 imageAlt={selectedCoffee.name}
-                stub={<div style={{ padding: '20px 14px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 8, textAlign: 'center' }}><span style={{ fontFamily: "'Anton', sans-serif", fontSize: 18, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>RECIPE</span><span style={{ fontSize: 10, opacity: 0.55, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Tear here</span></div>}
+                stub={<div style={{ padding: '20px 14px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 8, textAlign: 'center' }}><span style={{ fontFamily: "'Anton', sans-serif", fontSize: isMobile ? 16 : 18, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>RECIPE</span><span style={{ fontSize: isMobile ? 9 : 10, opacity: 0.55, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Tear here</span></div>}
                 orientation="horizontal"
                 scrim
                 imageRadius={8}
                 onTear={() => setStep('recipe')}
-                width={460}
-                height={250}
-                stubSize={150}
+                width={736}
+                height={400}
+                stubSize={240}
                 radius={16}
                 holes={12}
                 holeSize={6}
@@ -249,20 +257,20 @@ function App() {
                 stretch={30}
                 resistance={0.45}
                 rotate={4}
-                tilt
-                tiltMax={9}
-                tiltReach={260}
-                parallax={6}
-                perspective={1000}
+                tilt={!isMobile}
+                tiltMax={isMobile ? 0 : 9}
+                tiltReach={isMobile ? 0 : 260}
+                parallax={isMobile ? 0 : 6}
+                perspective={isMobile ? 900 : 1000}
                 background="#151b18"
                 color="#f5f5f5"
                 border
                 borderWidth={1}
                 recenter
               >
-                <div style={{ padding: '22px 24px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div style={{ padding: isMobile ? '18px 20px' : '22px 24px', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div><p style={{ fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.55, marginBottom: 6 }}>Brew & Bloom · Combo</p><p style={{ fontSize: 12, opacity: 0.8 }}>{selectedCoffee.name}</p><p style={{ fontSize: 12, opacity: 0.8 }}>+ {selectedDessert.name}</p></div>
-                  <p style={{ fontFamily: "'Anton', sans-serif", fontSize: 'clamp(22px, 4vw, 32px)', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1.1 }}>Get your combo recipe</p>
+                  <p style={{ fontFamily: "'Anton', sans-serif", fontSize: isMobile ? 'clamp(20px, 6vw, 27px)' : 'clamp(22px, 4vw, 32px)', letterSpacing: '-0.02em', textTransform: 'uppercase', lineHeight: 1.1 }}>Get your combo recipe</p>
                 </div>
               </TearTicket>
             </div>
