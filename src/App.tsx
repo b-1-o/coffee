@@ -37,7 +37,7 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   const duration = isMobile ? 520 : 650
   const easing = 'cubic-bezier(0.22,1,0.36,1)'
   const transition = isMobile
-    ? `transform ${duration}ms ${easing}, opacity ${duration}ms ${easing}`
+    ? `transform ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, height ${duration}ms ${easing}, bottom ${duration}ms ${easing}`
     : `transform ${duration}ms ${easing}, filter ${duration}ms ${easing}, opacity ${duration}ms ${easing}, left ${duration}ms ${easing}, height ${duration}ms ${easing}, bottom ${duration}ms ${easing}`
   const base: React.CSSProperties = {
     position: 'absolute',
