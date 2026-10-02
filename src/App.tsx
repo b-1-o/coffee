@@ -23,7 +23,7 @@ function useCarousel(count: number) {
     if (isAnimating) return
     setIsAnimating(true)
     setActiveIndex((prev) => dir === 'next' ? (prev + 1) % count : (prev + count - 1) % count)
-    window.setTimeout(() => setIsAnimating(false), 650)
+    window.setTimeout(() => setIsAnimating(false), 720)
   }, [isAnimating, count])
 
   return { activeIndex, isMobile, navigate }
@@ -34,7 +34,7 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
   const left = (activeIndex + count - 1) % count
   const right = (activeIndex + 1) % count
   const role = index === center ? 'center' : index === left ? 'left' : index === right ? 'right' : 'back'
-  const duration = isMobile ? 560 : 650
+  const duration = isMobile ? 580 : 720
   const easing = 'cubic-bezier(0.22,1,0.36,1)'
 
   if (isMobile) {
@@ -52,7 +52,7 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
     if (role === 'center') {
       return {
         ...base,
-        transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 1.04 : 1.95) + ')',
+        transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? 1.08 : 1.95) + ')',
         opacity: 1,
         zIndex: 20,
       }
@@ -63,7 +63,7 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
       const y = dessert ? '3vh' : '10vh'
       return {
         ...base,
-        transform: `translate3d(calc(-50% + ${x}), ${y}, 0) scale(${dessert ? 0.58 : 0.96})`,
+        transform: `translate3d(calc(-50% + ${x}), ${y}, 0) scale(${dessert ? 0.46 : 0.96})`,
         opacity: dessert ? 0.68 : 0.72,
         zIndex: 10,
       }
@@ -153,7 +153,7 @@ function HeroCarousel({
   return (
     <div className="relative w-full overflow-hidden" style={{ backgroundColor: current.bg, transition: 'background-color 480ms cubic-bezier(0.22,1,0.36,1)', fontFamily: "'Inter', sans-serif" }}>
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0, background: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.28) 34%, rgba(255,255,255,0.04) 72%, rgba(255,255,255,0.16) 100%)' }} />
-      <div className="relative w-full" style={{ height: '100svh', minHeight: isMobile ? 560 : 620, overflow: 'hidden', touchAction: 'pan-y', overscrollBehavior: 'contain', isolation: 'isolate' }}>
+      <div className="relative w-full" style={{ height: '100svh', minHeight: isMobile ? 560 : 620, overflow: 'hidden', touchAction: 'pan-y', overscrollBehaviorX: 'contain', isolation: 'isolate' }}>
         <div className="carousel-noise absolute inset-0 pointer-events-none" style={{ zIndex: 50, opacity: isMobile ? 0 : 0.16, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`, backgroundSize: '200px 200px', backgroundRepeat: 'repeat' }} />
 
         {/* Layer 1 — oversized editorial word in the background */}
@@ -184,7 +184,7 @@ function HeroCarousel({
                     margin: 0,
                     objectFit: 'contain',
                     objectPosition: 'center center',
-                    transform: dessert ? 'scale(1.04)' : (isMobile ? 'none' : 'scale(2)'),
+                    transform: dessert ? 'scale(1.04)' : (isMobile ? 'none' : 'scale(2.55)'),
                     transformOrigin: 'center center',
                     display: 'block',
                     pointerEvents: 'none',
