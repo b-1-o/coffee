@@ -1,133 +1,209 @@
 .tear-ticket {
   --tt-w: 460px;
   --tt-h: 250px;
-  --tt-stub: 140px;
-  --tt-bg: #1a2e24;
-  --tt-stub-bg: #0f1f18;
+  --tt-stub: 150px;
+  --tt-bg: #27272a;
+  --tt-stub-bg: #27272a;
   --tt-ink: #f5f5f5;
-  --tt-edge: rgba(245, 245, 245, 0.2);
+  --tt-edge: transparent;
+  --tt-edge-w: 1;
+  --tt-parallax: 6px;
+  --tt-body-w: 310px;
+  --tt-body-h: 250px;
+  --tt-inset: 8px;
+  --tt-span: 0.78;
+  --tt-art-radius: 8px;
+  --tt-fit: 1;
+
   position: relative;
   width: min(var(--tt-w), 100%);
   color: var(--tt-ink);
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
+
+.tear-ticket[data-disabled] {
+  opacity: 0.6;
+}
+
 .tear-ticket__stage {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 460 / 250;
-  max-width: var(--tt-w);
-  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--tt-w);
+  height: var(--tt-h);
+  transform: scale(var(--tt-fit));
+  transform-origin: top left;
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+.tear-ticket[data-shift='x'] .tear-ticket__stage {
+  transform: translateX(calc(var(--tt-stub) * var(--tt-fit) / 2)) scale(var(--tt-fit));
+}
+
+.tear-ticket[data-shift='y'] .tear-ticket__stage {
+  transform: translateY(calc(var(--tt-stub) * var(--tt-fit) / 2)) scale(var(--tt-fit));
+}
+
 .tear-ticket__plane {
   position: absolute;
   inset: 0;
-  display: flex;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.45);
-  transform-style: preserve-3d;
 }
-.tear-ticket__body {
-  flex: 1;
-  background: var(--tt-bg);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 20px 24px;
-  border-right: 2px dashed rgba(255,255,255,0.18);
-  min-width: 0;
-}
-.tear-ticket__body-art {
+
+.tear-ticket__piece {
   position: absolute;
   inset: 0;
-  opacity: 0.25;
-  object-fit: cover;
+  pointer-events: none;
+}
+
+.tear-ticket__piece--stub {
+  outline: none;
+  will-change: transform;
+}
+
+.tear-ticket__edge {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
-.tear-ticket__body-content {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
+
+.tear-ticket__edge path {
+  fill: none;
+  stroke: var(--tt-edge);
+  stroke-width: var(--tt-edge-w);
 }
-.tear-ticket__stub {
-  width: var(--tt-stub);
-  flex-shrink: 0;
+
+.tear-ticket__paper {
+  position: absolute;
+  inset: 0;
+  background: var(--tt-bg);
+  pointer-events: auto;
+}
+
+.tear-ticket__paper--stub {
   background: var(--tt-stub-bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px 12px;
   cursor: grab;
   touch-action: none;
-  position: relative;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
-  transform-origin: left center;
 }
-.tear-ticket__stub:active {
+
+.tear-ticket[data-grabbing] .tear-ticket__paper--stub {
   cursor: grabbing;
 }
-.tear-ticket[data-torn] .tear-ticket__stub {
-  transform: translateX(80px) rotate(12deg);
-  opacity: 0;
-  pointer-events: none;
+
+.tear-ticket[data-disabled] .tear-ticket__paper--stub {
+  cursor: default;
 }
-.tear-ticket__perforation {
+
+.tear-ticket__art {
   position: absolute;
+  top: var(--tt-inset);
+  left: var(--tt-inset);
+  width: calc(var(--tt-body-w) - var(--tt-inset) * 2);
+  height: calc(var(--tt-body-h) * var(--tt-span) - var(--tt-inset) * 2);
+  border-radius: var(--tt-art-radius);
+  overflow: hidden;
+}
+
+.tear-ticket__image {
+  position: absolute;
+  top: calc(var(--tt-parallax) * -1);
+  left: calc(var(--tt-parallax) * -1);
+  width: calc(100% + var(--tt-parallax) * 2);
+  max-width: none;
+  height: calc(100% + var(--tt-parallax) * 2);
+  object-fit: cover;
+  -webkit-user-drag: none;
+  transition: filter 700ms ease;
+}
+
+.tear-ticket[data-used] .tear-ticket__image {
+  filter: grayscale(1) brightness(0.75);
+}
+
+.tear-ticket__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--tt-bg) 0%,
+    color-mix(in srgb, var(--tt-bg) 72%, transparent) 30%,
+    color-mix(in srgb, var(--tt-bg) 18%, transparent) 58%,
+    transparent 80%
+  );
+}
+
+.tear-ticket__content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
   left: 0;
-  top: 8px;
-  bottom: 8px;
-  width: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  width: calc(var(--tt-w) - var(--tt-stub));
+  transition: opacity 500ms ease;
+}
+
+.tear-ticket[data-used] .tear-ticket__content {
+  opacity: 0.55;
+}
+
+.tear-ticket__stub {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--tt-stub);
+}
+
+.tear-ticket[data-orientation='vertical'] .tear-ticket__content {
+  bottom: auto;
+  width: 100%;
+  height: calc(var(--tt-h) - var(--tt-stub));
+}
+
+.tear-ticket[data-orientation='vertical'] .tear-ticket__stub {
+  top: auto;
+  left: 0;
+  width: auto;
+  height: var(--tt-stub);
+}
+
+.tear-ticket[data-instant] .tear-ticket__stage,
+.tear-ticket[data-instant] .tear-ticket__content,
+.tear-ticket[data-instant] .tear-ticket__image {
+  transition-duration: 0ms;
+}
+
+.tear-ticket__fibres {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
-.tear-ticket__hole {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #0a1f1a;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+
+.tear-ticket__fibres path {
+  fill: none;
+  stroke: var(--tt-bg);
+  stroke-linecap: round;
+  opacity: 0;
 }
-.tear-ticket__label {
-  font-family: 'Anton', sans-serif;
-  font-size: 1.35rem;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  line-height: 1.15;
+
+.tear-ticket__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.tear-ticket__hint {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  opacity: 0.55;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-.tear-ticket__pair {
-  font-size: 0.7rem;
-  opacity: 0.7;
-  margin-top: 4px;
-}
-.tear-ticket__cta {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  margin-top: auto;
-}
-.tear-ticket__meta {
-  font-size: 0.7rem;
-  opacity: 0.55;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+
+@media (prefers-reduced-motion: reduce) {
+  .tear-ticket__stage {
+    transition: none;
+  }
 }
