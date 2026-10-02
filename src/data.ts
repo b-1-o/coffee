@@ -1,9 +1,9 @@
 export const COFFEES = [
-  { id: 'caramel-macchiato', name: 'Caramel Macchiato', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee1.png', bg: '#0B3D2E', short: 'Vanilla syrup, steamed milk, espresso mark & caramel drizzle' },
-  { id: 'iced-vanilla-latte', name: 'Iced Vanilla Latte', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee2.png', bg: '#0A2F24', short: 'Chilled espresso, vanilla & cold milk over ice' },
-  { id: 'caramel-frappuccino', name: 'Caramel Frappuccino', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee3.png', bg: '#0C3528', short: 'Blended coffee, caramel, ice & whipped cream' },
-  { id: 'chocolate-mocha', name: 'Chocolate Mocha', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee4.png', bg: '#0A2A20', short: 'Espresso, rich chocolate & steamed milk' },
-  { id: 'iced-white-mocha', name: 'Iced White Mocha', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee.png', bg: '#0B3D2E', short: 'White chocolate, espresso & milk over ice' },
+  { id: 'caramel-macchiato', name: 'Iced Vanilla Latte', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee1.png', bg: '#0B3D2E', short: 'Vanilla syrup, steamed milk, espresso mark & caramel drizzle' },
+  { id: 'iced-vanilla-latte', name: 'Caramel Frappuccino', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee2.png', bg: '#0A2F24', short: 'Chilled espresso, vanilla & cold milk over ice' },
+  { id: 'caramel-frappuccino', name: 'Chocolate Mocha', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee3.png', bg: '#0C3528', short: 'Blended coffee, caramel, ice & whipped cream' },
+  { id: 'chocolate-mocha', name: 'Iced White Mocha', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee4.png', bg: '#0A2A20', short: 'Espresso, rich chocolate & steamed milk' },
+  { id: 'iced-white-mocha', name: 'Caramel Macchiato', src: 'https://raw.githubusercontent.com/b-1-o/coffee/main/assets/coffee.png', bg: '#0B3D2E', short: 'White chocolate, espresso & milk over ice' },
 ] as const
 
 export const DESSERTS = [
