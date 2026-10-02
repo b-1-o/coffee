@@ -49,10 +49,10 @@ function getItemRole(index: number, activeIndex: number, count: number, isMobile
     return {
       ...base,
       left: '50%',
-      bottom: dessert ? (isMobile ? '25%' : '15%') : (isMobile ? '17%' : '14%'),
-      height: dessert ? (isMobile ? '34%' : '41%') : (isMobile ? '56%' : '58%'),
-      aspectRatio: dessert ? '1 / 1' : '0.6 / 1',
-      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? (isMobile ? 1.04 : 1.1) : (isMobile ? 1.28 : 1.38)) + ')',
+      bottom: dessert ? (isMobile ? '24%' : '14%') : (isMobile ? '12%' : '8%'),
+      height: dessert ? (isMobile ? '36%' : '43%') : (isMobile ? '68%' : '72%'),
+      aspectRatio: dessert ? '1 / 1' : '0.58 / 1',
+      transform: 'translate3d(-50%, 0, 0) scale(' + (dessert ? (isMobile ? 1.04 : 1.1) : 1) + ')',
       filter: isMobile ? 'none' : 'none',
       opacity: 1,
       zIndex: 20,
@@ -125,7 +125,19 @@ function HeroCarousel({
                 <img
                   src={item.src}
                   alt={item.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center bottom', display: 'block', pointerEvents: 'none', userSelect: 'none' }}
+                  style={{
+                    width: dessert ? '100%' : (isMobile ? '128%' : '124%'),
+                    height: dessert ? '100%' : (isMobile ? '128%' : '124%'),
+                    maxWidth: 'none',
+                    maxHeight: 'none',
+                    marginLeft: dessert ? '0' : (isMobile ? '-14%' : '-12%'),
+                    marginTop: dessert ? '0' : (isMobile ? '-10%' : '-8%'),
+                    objectFit: 'contain',
+                    objectPosition: 'center center',
+                    display: 'block',
+                    pointerEvents: 'none',
+                    userSelect: 'none'
+                  }}
                   draggable={false}
                 />
                 <div
@@ -133,7 +145,7 @@ function HeroCarousel({
                   style={{
                     position: 'absolute',
                     left: '50%',
-                    top: 'calc(100% + 10px)',
+                    top: isMobile ? 'calc(100% + 6px)' : 'calc(100% + 10px)',
                     transform: 'translate3d(-50%, 0, 0)',
                     width: 'max-content',
                     maxWidth: 'calc(100vw - 40px)',
@@ -146,7 +158,7 @@ function HeroCarousel({
                   <p style={{
                     margin: 0,
                     fontFamily: "'Anton', sans-serif",
-                    fontSize: isMobile ? 'clamp(22px, 7vw, 32px)' : 'clamp(24px, 3vw, 38px)',
+                    fontSize: isMobile ? 'clamp(21px, 6.4vw, 30px)' : 'clamp(26px, 3vw, 40px)',
                     lineHeight: 0.95,
                     letterSpacing: '-0.025em',
                     textTransform: 'uppercase',
